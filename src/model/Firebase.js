@@ -3,7 +3,7 @@ var serviceAccount = require("../config/perfecta-83c3c-firebase-adminsdk-ll0wl-9
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://perfecta-83c3c.firebaseio.com"
+  databaseURL: "<DATABASE_URL_HERE>"
 });
 
 module.exports = admin.database();
