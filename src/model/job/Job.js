@@ -17,19 +17,18 @@ module.exports = class Jobs{
 	}
 
 	createJob(categoryName, jobTitle, jobDescription){
-		let sended = false;
-		
-		this.databaseReference.on('child_added', snap => {
-			sended = true;
-		});
+		let out = _ => (new Promise(async (resolve, reject) => {
+			firebase.ref('perfecta/perfecta-category').orderByChild('category').equalTo(categoryName).once('value', async obj => {
+				if(obj.val()){
+					await this.databaseReference.child(jobTitle).set({"jobCategory":categoryName, "description":jobDescription});
+					resolve(true);	
+				}else{
+					resolve(false);
+				}	
+			});
+		}))
 
-		firebase.ref('perfecta/perfecta-category').orderByChild('category').equalTo(categoryName).once('value', obj => {
-			if(!obj){
-				return false;
-			}
-			this.databaseReference.child(jobTitle).set({"jobCategory":categoryName, "description":jobDescription});
-		});
-		return sended;
+		return await out();
 	}
 
 	async deleteJob(jobTitle){
