@@ -15,12 +15,15 @@ app.use(cors())
 
 //Controllers
 //Routes GET
-app.get("/categorys", (req, res) => {
-	res.send(category.getAllCategorys());
+app.get("/categorys", async (req, res) => {
+	let out = await category.getAllCategories();
+	res.send(out);
 });
 
-app.get('/jobs', (req, res) => {
-	//res.send(job.getAllJobs);
+//Get All jobs by categoryName
+app.get('/category/jobs/:categoryName', async (req, res) => {
+	let out = await job.getJobsByCategory(req.params.categoryName);
+	res.send(out);
 });
 
 //Routes POST
