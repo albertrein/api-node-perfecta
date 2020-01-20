@@ -33,11 +33,9 @@ module.exports = class Categoria{
 		return sended;
 	}
 
-
-	getAllCategorys(){
-		let categoryList = {};
-		this.databaseReference.once('value', snapshot => {
-			return snapshot.val();
+	getAllCategories = _ => new Promise((resolve, reject) => {
+		this.databaseReference.once('value', categories => {
+			resolve(categories.val());
 		});
-	}
+	});
 }
