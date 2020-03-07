@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const sendmail = require('./services/SendMail');
+const sendemail = require('./src/services/SendEmail');
 
 //Models
 const Category = require('./src/model/category/Category');
@@ -42,12 +42,19 @@ app.post('/new/job/', async (req, res) => {
 		res.send({"OK":"Fail"});		
 	}
 });
-
-app.post('/sendmail' , async (req, res) => {
+//Send job file
+/*app.post('/sendmail' , async (req, res) => {
 	if(!(req.get('origin').includes('perfecta-rh.'))){
 		res.send({"success": 'fail'});
 	}
-	let resultOfSendMail = sendmail.sendThisMail(req.body.name, req.body.)
+	let resultOfSendMail = sendmail.sendThisMail(req.body.name, req.body.message)
+});*/
+//Send Contact form
+app.post('/sendmail/contact' , async (req, res) => {
+	if(!(req.get('origin').includes('perfecta-rh.'))){
+		res.send({"success": 'fail'});
+	}
+	let resultOfSendMail = sendmail.sendContactForm(req.body.name, req.body.email, req.body.phone, req.body.message);
 })
 
 //Routes DELETE
