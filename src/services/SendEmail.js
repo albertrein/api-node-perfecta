@@ -1,29 +1,46 @@
-const email = require('nodemailer');
+const mailer = require('nodemailer');
 
-const transporter = email.createTransport({
-    service: 'gmail',
-    auth : {
-        'user': '',
-        'pass': ''
+module.exports = class SendMailer{
+    emailHost = 'perfectaperfecta@gmail.com';
+    hostConfig = {
+        service: 'gmail',
+        auth : {
+            'user': '',
+            'pass': ''
+        }
     }
-});
 
-const configs = {
-    from: 'perfecta',
-    to: 'perfecta',
-    subject: 'Curriculo para vaga: x',
-    text: 'Nome, endereço, arquivo;'
+
+    sendContactForm = (name, email, phone, message) => new Promise(async (resolve, reject) => {
+        if(!name || !email || !phone || !message){
+            reject();
+        }
+        let titleOfEmail = "Contato - Perfecta";
+        message += " Telefone de contato: "+phone;
+
+        makeSend(email, titleEmail, message).then(() => resolve()).catch(() => reject());
+    });
+
+    makeSend = (emailSend, titleEmail, emailBody) => new Promise(async (resolve, reject) => {
+        //Setting configs to mailer
+        let configs = {
+            from: this.emailHost,
+            to: emailBody,
+            subject: titleEmail,
+            text: emailBody            
+        }
+
+        //Setting Transporter
+        let transporter = mailer.createTransport(this.hostConfig);
+
+        await transporter.sendMail(configs, (error, info) => {
+            if(error){
+                console.log('Não foi possível enviar.'+info);
+                reject();
+            }
+            resolve();   
+        });
+
+    });
     
 }
-
-transporter.sendMail(configs, (error, info) => {
-    if(error){
-        console.log('Não foi possível enviar.'+info);
-        return false;
-    }
-    return true;    
-})
-/*Todo:
-    - Set name file to send.
-    - Make this a class to instance any time any where.
-*/
